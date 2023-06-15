@@ -6,7 +6,7 @@ Note Taker App allows users to write, save and delete their notes.
 
 ## Deployment
 
-N/A
+[Heroku Deployment](https://note-taker-ts-2751675db44c.herokuapp.com/)
 
 ## Usage
 
