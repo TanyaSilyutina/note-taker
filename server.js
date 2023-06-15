@@ -3,7 +3,7 @@ const path = require('path');
 const uuid = require('uuid');
 const fs = require("fs");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const staticOptions = {
     root: path.join(__dirname),
@@ -64,8 +64,6 @@ app.get('/api/notes/:id', function(req, res) {
     res.json(notes_db[req.params.id]);
 })
 
-
-// get * returns index
-app.get('/*', (req, res) => res.sendFile('/public/index.html', staticOptions))
+app.get('/', (req, res) => res.sendFile('/public/index.html', staticOptions))
 
 app.listen(port, () => console.log(`The port ${port} is connected`));
