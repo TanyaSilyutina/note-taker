@@ -9,7 +9,7 @@ const staticOptions = {
     root: path.join(__dirname),
 }
 
-const aFile = require('db/db.json');
+const notes_db = require('./db/db.json');
 
 
 app.use(express.static('public'));
@@ -23,18 +23,33 @@ app.get('/*', (req, res) => res.sendFile('public/index.html', staticOptions))
 
 
 app.get('/api/notes', (req, res) => {
-    res.send([
-        {
-            title: 'My cool note',
-            text: 'Text',
-            id: uuid.v4().toString(),
-        }
-        ]
-    );
+    fs.readFile("./db/db.json", "utf-8", (err, data) => {
+        const notes = JSON.parse(data);
+        res.json(notes);
+    });
 })
+
 app.post('/api/notes', (req, res) => {
-    console.log(req.body)
-    res.send('ok');
+    const note = {
+        id: uuid.v4(),
+        title: req.body.title,
+        text: req.body.text
+    };
+
+    fs.readFile("./db/db.json", "utf-8", (err, data) => {
+        const notes = JSON.parse(data);
+        notes.push(note);
+
+        fs.writeFile("./db/db.json", JSON.stringify(notes,null,4),(err)=>{
+            if (err) {
+                return res.status(500).json({
+                    msg:"error writing to db"
+                })
+            } else {
+                return res.json(notes);
+            }
+        })
+    });
 })
 
 
